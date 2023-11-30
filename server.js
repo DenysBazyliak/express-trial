@@ -2,13 +2,23 @@ const express = require("express");
 const dotenv = require("dotenv");
 const { log } = require("console");
 
-dotenv.config({ path: "./config/config.env" });
+// Middleware
+const logger = require("./middleware/logger");
 
 // Route files
-const words = require('./routes/words')
+const words = require('./routes/words');
+
+dotenv.config({ path: "./config/config.env" });
+
+
+
+
 
 
 const app = express();
+
+// Shows route information
+app.use(logger)
 
 // Mount routers
 app.use('/app/v1/words/', words)
