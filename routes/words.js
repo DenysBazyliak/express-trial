@@ -1,6 +1,20 @@
 const express = require('express')
 const router = express.Router()
 
+const {getWord, getWords, patchWord, postWord, putWord,  deleteWord }= require('../controllers/words')
+
+router
+.route('/')
+.get(getWord)
+.post(postWord)
+
+router
+.route('/:id')
+.get(getWords)
+.put(putWord)
+.patch(patchWord)
+.delete(deleteWord)
+
 const words = [
     {
         word_id:'seq443',
@@ -18,20 +32,5 @@ const words = [
     }
 ]
 
-router.get('/', (req, res)=>{
-    res.status(200).json({success:true, message:'Get all words', data:words})
-})
-router.post('/', (req, res)=>{
-    res.status(201).json({success:true, message:'Create new word'})
-})
-router.put('/:id', (req, res)=>{
-    res.status(200).json({success:true, message:`Display word ${req.params.id}`})
-})
-router.patch('/:id', (req, res)=>{
-    res.status(200).json({success:true, message:`Update word ${req.params.id}`})
-})
-router.delete('/:id', (req, res)=>{
-    res.status(200).json({success:true, message:'Delete word ${req.params.id}'})
-})
 
 module.exports = router;
