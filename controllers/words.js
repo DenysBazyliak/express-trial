@@ -1,4 +1,5 @@
-const words = require('./')
+const words = require('../_data/words')
+
 
 
 // @desc        Get all words
