@@ -1,14 +1,16 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require('morgan')
+const connectDB = require('./config/db')
 
-const { log } = require("console");
+// Load env vars
+dotenv.config({ path: "./config/config.env" });
+
+// Connect to the database
+connectDB()
 
 // Route files
 const words = require('./routes/words');
-
-dotenv.config({ path: "./config/config.env" });
-
 
 const app = express();
 
@@ -23,4 +25,11 @@ app.use('/app/v1/words/', words)
 
 const PORT = process.env.PORT || 5001;
 
-app.listen(PORT, log(`Server is running in ${process.env.NODE_ENV} mode on port:${PORT}`));
+const server = app.listen(PORT, console.log(`Server is running in ${process.env.NODE_ENV} mode on port:${PORT}`));
+
+// Handle unhandled promise rejections 
+process.on('unhandledRejection', (err, promise)=>{
+    console.log(`Error message: ${err.message}`)
+    // Close server and exit process 
+    server.close(()=> process.exit(1))
+})
