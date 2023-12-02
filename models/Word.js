@@ -5,31 +5,33 @@ const WordSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please add a word'],
         unique: true,
-        trim:true,
-        maxLength: [50,'The word cannot have more than 50 characters']
+        trim: true,
+        maxLength: [50, 'The word cannot have more than 50 characters']
     },
-    // slug: String
     translation: {
         type: String,
-        required:   false,
+        required: false,
         unique: false,
-        trim:true,
-        maxLength: [200,'The translation cannot have more than 200 characters']
+        trim: true,
+        maxLength:[80, 'The translation cannot have more than 80 characters']
+
     },
     definition: {
         type: String,
         required: false,
         unique: false,
         trim:true,
-        maxLength: [500,'The definition cannot have more than 500 characters']
+        maxLength: [400, 'The definition cannot have more than 400 characters']
     },
     examples: {
         type: String,
         required: false,
         unique: false,
-        trim:true,
-        maxLength: [500,'The definition cannot have more than 500 characters']
+        trim: true,
+        maxLength: [500, 'The definition cannot have more than 500 characters']
     }
+
+
 })
 
-module.exports = WordSchema
+module.exports = mongoose.model('WordSchema', WordSchema)
