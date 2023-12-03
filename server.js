@@ -4,11 +4,12 @@ const morgan = require('morgan')
 const connectDB = require('./config/db')
 const colors = require('colors')
 
+const errorHandler = require('./middleware/errorHandler')
 const WordSchema = require('./models/Word')
 
 
 // Load env vars
-dotenv.config({path: "./config/config.env"});
+dotenv.config({ path: "./config/config.env" });
 
 // Connect to the database
 connectDB()
@@ -29,6 +30,9 @@ if (process.env.NODE_ENV === 'development') {
 
 // Mount routers
 app.use('/app/v1/words', words)
+
+// Error handler
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 5001;
 
