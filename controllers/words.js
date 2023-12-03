@@ -1,3 +1,4 @@
+const ErrorResponse = require('../utils/errorResponse')
 const WordSchema = require('../models/Word');
 
 // @desc        Get all words
@@ -27,21 +28,14 @@ exports.getWord = async (req, res, next) => {
         const word = await WordSchema.findById(req.params.id);
 
         if (!word) {
-            return res.status(400).json({
-                success: false,
-            });
+            return next(new ErrorResponse(`Word not found with id of ${req.params.id}`, 404))
         }
         res.status(200).json({
             success: true,
             data: word,
         });
     } catch (err) {
-        next(err)
-        // res.status(400).json({
-        //     success: false,
-        //     err: err.message,
-        // },
-        // );
+        next(new ErrorResponse(`Word not found with id of ${req.params.id}`, 404))
     }
 };
 
