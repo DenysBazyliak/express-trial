@@ -1,7 +1,6 @@
 {
   "name": "express",
   "version": "1.0.0",
-  "description": "",
   "main": "server.js",
   "scripts": {
     "start": "NODE_ENV=p node server.js",
@@ -17,5 +16,10 @@
     "mongoose": "^8.0.2",
     "morgan": "^1.10.0",
     "nodemon": "^3.0.1"
-  }
+  },
+  "devDependencies": {
+    "prettier": "3.1.0"
+  },
+  "keywords": [],
+  "description": ""
 }
