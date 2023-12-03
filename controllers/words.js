@@ -13,10 +13,7 @@ exports.getWords = async (req, res, next) => {
             data: words,
         });
     } catch (err) {
-        res.status(500).json({
-            success: false,
-            err: err.message,
-        });
+        next(err)
     }
 };
 
@@ -35,7 +32,7 @@ exports.getWord = async (req, res, next) => {
             data: word,
         });
     } catch (err) {
-        next(new ErrorResponse(`Word not found with id of ${req.params.id}`, 404))
+        next(err)
     }
 };
 
@@ -50,10 +47,7 @@ exports.postWord = async (req, res, next) => {
             data: word,
         });
     } catch (err) {
-        res.status(400).json({
-            success: false,
-            err: err.message,
-        });
+        next(err)
     }
 };
 
@@ -67,22 +61,14 @@ exports.putWord = async (req, res, next) => {
             runValidators: true,
         });
         if (!word) {
-            return res.status(400).json({
-                success: false,
-            });
+            return next(new ErrorResponse(`Word not found with id of ${req.params.id}`, 404))
         }
         res.status(200).json({
             success: true,
             data: word,
         });
     } catch (err) {
-        res.status(500).json({
-            success: false,
-            err: err.message,
-        },
-        );
-
-
+        next(err)
     }
 };
 
@@ -105,11 +91,7 @@ exports.patchWord = async (req, res, next) => {
             data: word,
         });
     } catch (err) {
-        res.status(500).json({
-            success: false,
-            err: err.message,
-        },
-        );
+        next(err)
     }
 };
 
@@ -118,15 +100,14 @@ exports.patchWord = async (req, res, next) => {
 // @access      Public
 exports.deleteWord = async (req, res, next) => {
     try {
-        await WordSchema.deleteOne(req.params.id);
+        const word = await WordSchema.deleteOne(req.params.id);
+        if (!word.acknowledged) {
+            return next(new ErrorResponse(`Word not found with id of ${req.params.id}`, 404))
+        }
         res.status(200).json({
             success: true,
         });
     } catch (err) {
-        res.status(500).json({
-            success: false,
-            err: err.message,
-        },
-        );
+        next(err)
     }
 };
