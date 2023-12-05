@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify')
 
 const WordSchema = new mongoose.Schema({
   word: {
@@ -8,6 +9,7 @@ const WordSchema = new mongoose.Schema({
     trim: true,
     maxLength: [50, 'The word cannot have more than 50 characters']
   },
+  slug: String,
   translation: {
     type: String,
     required: false,
@@ -31,5 +33,10 @@ const WordSchema = new mongoose.Schema({
     maxLength: [500, 'The definition cannot have more than 500 characters']
   }
 });
+
+WordSchema.pre('save', function (next) {
+  this.slug = slugify(this.word, { lower: true })
+  next()
+})
 
 module.exports = mongoose.model('WordSchema', WordSchema);
