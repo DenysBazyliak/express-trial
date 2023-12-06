@@ -31,6 +31,10 @@ const WordSchema = new mongoose.Schema({
     unique: false,
     trim: true,
     maxLength: [500, 'The definition cannot have more than 500 characters']
+  },
+  createdAt:{
+    type: Date,
+    default: Date.now
   }
 });
 

@@ -13,7 +13,7 @@ const Word = require('./models/Word')
 mongoose.connect(process.env.MONGO_URI);
 
 // Read JSON files 
-// If you have files u want ot add preinstalled you may use this whole file 
+// If you have files you want to add preinstalled you may use this whole file 
 const words = JSON.parse(fs.readFileSync(`${__dirname}/_data/words.json`, 'utf-8'))
 
 // Import into db
