@@ -1,6 +1,24 @@
+[
     {
-        "word":"node",
-        "translation":"вузол",
-        "definition":"A point at which lines or pathways intersect",
-        "examples":"Sailors often used nodes on ships"
+        "word": "node",
+        "translation": "вузол",
+        "definition": "A point at which lines or pathways intersect",
+        "examples": "Sailors often used nodes on ships"
+    },
+    {
+        "word": "rigorous",
+        "translation": "прискіпливий",
+        "definition": "extremely thorough and careful.",
+        "examples": "Manager should always be rigorous"
+    },
+    {
+        "word": "persuasion",
+        "translation": "переконання",
+        "definition": "the action or fact of persuading someone or of being persuaded to do or believe something."
+    },
+    {
+        "word": "brandish",
+        "translation": "розмахувати",
+        "definition": "wave or flourish (something, especially a weapon) as a threat or in anger or excitement."
     }
+]
