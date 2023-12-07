@@ -1,7 +1,10 @@
 const express = require('express')
+
 const router = express.Router()
 
-const {getWord, getWords, patchWord, postWord, putWord,  deleteWord }= require('../controllers/words')
+const {getWord, getWords, patchWord, postWord, putWord,  deleteWord, wordPhotoUpload }= require('../controllers/words')
+
+router.route('/:id/photo').put(wordPhotoUpload)
 
 router
 .route('/')
