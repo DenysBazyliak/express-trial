@@ -1,6 +1,10 @@
+const path = require('path')
 const ErrorResponse = require('../utils/errorResponse')
 const asyncHandler = require('../middleware/asyncHandler')
 const Word = require('../models/Word');
+
+const maxSize = process.env.MAX_FILE_UPLOAD
+const filePath = process.env.FILE_UPLOAD_PATH
 
 // @desc        Get all words
 // @route       GET /api/v1/words
@@ -35,7 +39,7 @@ exports.getWords = asyncHandler(async (req, res, next) => {
     }
 
     const page = parseInt(req.query.page, 10) || 1
-    const limit = parseInt(req.query.limit, 10) || 25 
+    const limit = parseInt(req.query.limit, 10) || 25
     const startIndex = (page - 1) * limit
     const endIndex = page * limit
     const total = await Word.countDocuments()
@@ -47,14 +51,14 @@ exports.getWords = asyncHandler(async (req, res, next) => {
 
     const pagination = {}
 
-    if(endIndex < total){
+    if (endIndex < total) {
         pagination.next = {
             page: page + 1,
             limit
         }
     }
-    if(startIndex > 0){
-        pagination.prev ={
+    if (startIndex > 0) {
+        pagination.prev = {
             page: page - 1,
             limit
         }
@@ -149,4 +153,51 @@ exports.deleteWord = asyncHandler(async (req, res, next) => {
     res.status(200).json({
         success: true,
     });
+})
+
+
+// @desc        Upload photo
+// @route       PUT /api/v1/words/:id/photo
+// @access      Public
+exports.wordPhotoUpload = asyncHandler(async (req, res, next) => {
+    const word = await Word.findById(req.params.id);
+
+    if (!word) {
+        return next(new ErrorResponse(`Word not found with id of ${req.params.id}`, 404))
+    }
+
+    if (!req.files) {
+        return next(new ErrorResponse(`Please upload a file`, 400))
+    }
+
+    const file = req.files.file
+
+    // Make sure the image is a photo
+    if (!file.mimetype.startsWith('image')) {
+        return next(new ErrorResponse(`Please upload an image file`, 400))
+    }
+
+    // Check file-size
+    if (file.size > maxSize) {
+        return next(new ErrorResponse(`File should be less than ${maxSize} bites`, 400))
+    }
+
+    // Create custom filename 
+    file.name = `photo_${word._id}${path.parse(file.name).ext}`
+
+    file.mv(`${filePath}/${file.name}`, async err => {
+        if (err) {
+            console.log(err)
+            return next(new ErrorResponse(`Problem with the file upload`, 500))
+        }
+        await Word.findByIdAndUpdate(req.params.id, {
+            photo: file.name
+        })
+
+        res.status(200).json({
+            success: true,
+            data: file.name
+        })
+    })
+
 })
