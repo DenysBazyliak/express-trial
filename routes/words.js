@@ -7,15 +7,17 @@ const {getWord, getWords, patchWord, postWord, putWord,  deleteWord, wordPhotoUp
 const Word = require('../models/Word')  
 const advancedResults = require('../middleware/advancedResults')
 
-router.route('/:id/photo').put(wordPhotoUpload)
+router
+.route('/words/:id/photo')
+.put(wordPhotoUpload)
 
 router
-.route('/')
+.route('/words')
 .get(advancedResults(Word), getWords)
 .post(postWord)
 
 router
-.route('/:id')
+.route('/words/:id')
 .get(getWord)
 .put(putWord)
 .patch(patchWord)

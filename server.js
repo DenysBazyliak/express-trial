@@ -10,14 +10,16 @@ const errorHandler = require('./middleware/errorHandler')
 const WordSchema = require('./models/Word')
 
 
+// Route files
+const words = require('./routes/words');
+const auth = require('./routes/auth');
+
+
 // Load env vars
 dotenv.config({ path: "./config/config.env" });
 
 // Connect to the database
 connectDB()
-
-// Route files
-const words = require('./routes/words');
 
 const app = express();
 
@@ -36,7 +38,8 @@ app.use(fileUploader())
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')))
 // Mount routers
-app.use('/app/v1/words', words)
+app.use('/app/v1', words)
+app.use('/app/v1', auth)
 
 // Error handler
 app.use(errorHandler)
