@@ -21,7 +21,7 @@ const UserSchema = new mongoose.Schema({
         enum: ['user', 'publisher'],
         default: 'user'
     },
-    password:{
+    password: {
         type: String,
         required: [true, 'Please add a password'],
         minLength: [8, 'Password should be at least 8 characters long'],
@@ -29,23 +29,29 @@ const UserSchema = new mongoose.Schema({
     },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
-    createdAt:{
+    createdAt: {
         type: Date,
         default: Date.now
     }
 })
 
 // Encrypt password using bcrypt
-UserSchema.pre('save', async function(next){
+UserSchema.pre('save', async function (next) {
     const salt = await bcrypt.genSalt(10)
     this.password = await bcrypt.hash(this.password, salt)
 })
 
 // Sign JWT and return
-UserSchema.methods.getSignJwtToken = function(){
-    return jwt.sign({id:this._id}, process.env.JWT_SECRET, {
+UserSchema.methods.getSignJwtToken = function () {
+    return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRE
     })
+}
+
+// Match user entered password to hashed  password in database
+UserSchema.methods.matchPassword = async function (enteredPassword) {
+    console.log('passwords', enteredPassword, this.password)
+    return await bcrypt.compare(enteredPassword, this.password)
 }
 
 module.exports = mongoose.model('User', UserSchema)
