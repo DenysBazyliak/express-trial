@@ -2,12 +2,12 @@ const path = require('path')
 const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require('morgan')
-const connectDB = require('./config/db')
-const fileUploader = require('express-fileupload')
+const fileupload = require('express-fileupload')
 const colors = require('colors')
 
+const cookieParser = require('cookie-parser')
 const errorHandler = require('./middleware/errorHandler')
-const WordSchema = require('./models/Word')
+const connectDB = require('./config/db')
 
 
 // Route files
@@ -26,6 +26,9 @@ const app = express();
 // Body parser
 app.use(express.json())
 
+// Cookie parser
+app.use(cookieParser())
+
 // Shows route information
 // Dev logging middleware
 if (process.env.NODE_ENV === 'development') {
@@ -33,7 +36,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // File uploading 
-app.use(fileUploader())
+app.use(fileupload())
 
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')))
