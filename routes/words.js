@@ -8,23 +8,23 @@ const Word = require('../models/Word')
 const advancedResults = require('../middleware/advancedResults')
 
 
-const { protect } = require('../middleware/auth')
+const { protect, authorize } = require('../middleware/auth')
 
 router
     .route('/words/:id/photo')
-    .put(protect, wordPhotoUpload)
+    .put(protect, authorize('publisher', 'admin'), wordPhotoUpload)
 
 router
     .route('/words')
     .get(advancedResults(Word), getWords)
-    .post(protect, postWord)
+    .post(protect, authorize('publisher', 'admin'), postWord)
 
 router
     .route('/words/:id')
     .get(getWord)
-    .put(protect, putWord)
-    .patch(protect, patchWord)
-    .delete(protect, deleteWord)
+    .put(protect, authorize('publisher', 'admin'), putWord)
+    .patch(protect, authorize('publisher', 'admin'), patchWord)
+    .delete(protect, authorize('publisher', 'admin'), deleteWord)
 
 
 module.exports = router;
