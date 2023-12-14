@@ -53,14 +53,21 @@ exports.postWord = asyncHandler(async (req, res, next) => {
 // @route       PUT /api/v1/words/:id
 // @access      Public
 exports.putWord = asyncHandler(async (req, res, next) => {
-    const word = await Word.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true,
-    });
+    let word = await Word.findById(req.params.id);
 
     if (!word) {
         return next(new ErrorResponse(`Word not found with id of ${req.params.id}`, 404))
     }
+
+    // Make sure user is word owner 
+    if (word.user.toString() !== req.user.id && req.user.role !== 'admin') {
+        return next(new ErrorResponse(`User ${req.params.id} is not authorized to update this word`, 401))
+    }
+
+    word = await Word.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true
+    })
 
     res.status(200).json({
         success: true,
@@ -93,11 +100,24 @@ exports.patchWord = asyncHandler(async (req, res, next) => {
 // @route       DELETE /api/v1/words/:id
 // @access      Public
 exports.deleteWord = asyncHandler(async (req, res, next) => {
-    const word = await Word.deleteOne(req.params.id);
+    let word = await Word.findById(req.params.id);
 
-    if (!word.acknowledged) {
+    // if (!word.acknowledged) {
+    //     return next(new ErrorResponse(`Word not found with id of ${req.params.id}`, 404))
+    // }
+
+    if (!word) {
         return next(new ErrorResponse(`Word not found with id of ${req.params.id}`, 404))
     }
+
+    // Make sure user is word owner 
+    if (word.user.toString() !== req.user.id && req.user.role !== 'admin') {
+        return next(new ErrorResponse(`User ${req.params.id} is not authorized to delete this word`, 401))
+    }
+
+    // word = await Word.deleteOne(req.params.id)
+    word.remove()
+
 
     res.status(200).json({
         success: true,
