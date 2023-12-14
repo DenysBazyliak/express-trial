@@ -118,7 +118,6 @@ exports.deleteWord = asyncHandler(async (req, res, next) => {
     // word = await Word.deleteOne(req.params.id)
     word.remove()
 
-
     res.status(200).json({
         success: true,
     });
