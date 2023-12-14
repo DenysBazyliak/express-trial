@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Denys Bazyliak",
+        "email": "dbazyliak@gmail.com",
+        "password": "trakhmeister0",
+        "role": "admin"
+    },
+    {
+        "name": "John Doe",
+        "email": "jdoe@gmail.com",
+        "password": "trakhmeister0",
+        "role": "user"
+    },
+    {
+        "name": "Peter Hendrix",
+        "email": "phendrix@gmail.com",
+        "password": "trakhmeister0",
+        "role": "user"
+    },
+    {
+        "name": "Peter Newman",
+        "email": "pnewman@gmail.com",
+        "password": "trakhmeister0",
+        "role": "publisher"
+    },
+    {
+        "name": "Peter Goodman",
+        "email": "pgoodman@gmail.com",
+        "password": "trakhmeister0",
+        "role": "publisher"
+    }
+]

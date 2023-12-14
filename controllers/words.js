@@ -10,7 +10,6 @@ const filePath = process.env.FILE_UPLOAD_PATH
 // @route       GET /api/v1/words
 // @access      Public
 exports.getWords = asyncHandler(async (req, res, next) => {
-
     res.status(200).json(res.advancedResults);
 })
 
@@ -34,6 +33,14 @@ exports.getWord = asyncHandler(async (req, res, next) => {
 // @route       POST /api/v1/words
 // @access      Public
 exports.postWord = asyncHandler(async (req, res, next) => {
+    const userId = req.user.id
+
+    // Add user to req.body
+    req.body.user = userId
+
+    // Check for published word
+    const publishedWord = await Word.findOne({ user: userId })
+
     const word = await Word.create(req.body);
 
     res.status(201).json({
